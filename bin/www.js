@@ -1,10 +1,15 @@
-const dotenv = require('dotenv').config();
-const express = require("express");
+require('dotenv').config();
+var express = require('express');
+const app = require('../app');
 
-const app = express();
+const routes = require('../routes/index')(app);
 
-const PORT = process.env.PORT || 1337;
+app.set('port', process.env.PORT || 1337)
 
-app.listen(PORT, () => {
-	console.log(`Server running on ${PORT}`)
-})
+let server = app.listen(app.get('port'),
+	(err) => {
+		if (err) throw err;
+		let message = 'Server is running at http://localhost:' + server.address().port
+		console.log(message)
+	}
+)

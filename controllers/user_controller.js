@@ -1,135 +1,59 @@
-/**
- * Example Controller
- */
+let Users = require('../models/Users');
 
-const debug = require('debug')('books:example_controller');
-const { matchedData, validationResult } = require('express-validator');
-const models = require('../models');
-
-/**
- * Get all resources
- *
- * GET /
- */
-const index = async (req, res) => {
-    const examples = await models.Example.fetchAll();
-
-    res.send({
-        status: 'success',
-        data: examples,
-    });
-}
-
-/**
- * Get a specific resource
- *
- * GET /:exampleId
- */
-const show = async (req, res) => {
-    const example = await new models.Example({ id: req.params.exampleId })
-        .fetch();
-
-    res.send({
-        status: 'success',
-        data: example,
-    });
-}
-
-/**
- * Store a new resource
- *
- * POST /
- */
-const store = async (req, res) => {
-    // check for any validation errors
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(422).send({ status: 'fail', data: errors.array() });
-    }
-
-    // get only the validated data from the request
-    const validData = matchedData(req);
-
+exports.getUsers = async (req, res) => {
     try {
-        const example = await new models.Example(validData).save();
-        debug("Created new example successfully: %O", example);
-
-        res.send({
-            status: 'success',
-            data: example,
-        });
-
-    } catch (error) {
-        res.status(500).send({
-            status: 'error',
-            message: 'Exception thrown in database when creating a new example.',
-        });
-        throw error;
+        // Vi gör en fetch request
+        // Vi kallar på vår model
+        const response = await Users
+            .forge()
+            .fetchAll()
+            .then(function (data) {
+                const res = {
+                    success: true,
+                    data: data
+                }
+                return res;
+            })
+            .catch(error => {
+                const res = {
+                    success: false,
+                    error: error
+                }
+                return res
+            })
+        res.json(response)
+    } catch (e) {
+        console.log(`Failed to fetch the user user data: ${e}`)
     }
 }
 
-/**
- * Update a specific resource
- *
- * PUT /:exampleId
- */
-const update = async (req, res) => {
-    const exampleId = req.params.exampleId;
-
-    // make sure example exists
-    const example = await new models.Example({ id: exampleId }).fetch({ require: false });
-    if (!example) {
-        debug("Example to update was not found. %o", { id: exampleId });
-        res.status(404).send({
-            status: 'fail',
-            data: 'Example Not Found',
-        });
-        return;
-    }
-
-    // check for any validation errors
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(422).send({ status: 'fail', data: errors.array() });
-    }
-
-    // get only the validated data from the request
-    const validData = matchedData(req);
-
+exports.createUser = async (req, res) => {
     try {
-        const updatedExample = await example.save(validData);
-        debug("Updated example successfully: %O", updatedExample);
-
-        res.send({
-            status: 'success',
-            data: example,
-        });
-
-    } catch (error) {
-        res.status(500).send({
-            status: 'error',
-            message: 'Exception thrown in database when updating a new example.',
-        });
-        throw error;
+        // Vi gör en const med values från req.body
+        const { email, password, first_name, last_name } = req.body
+        const response = await Users.forge({
+            email: email,
+            password: password,
+            first_name: first_name,
+            last_name: last_name
+        }).save()
+            .then(function (data) {
+                const res = {
+                    success: true,
+                    data: data,
+                    message: "user created :)"
+                }
+                return res;
+            })
+            .catch(error => {
+                const res = {
+                    success: false,
+                    error: error
+                }
+                return res
+            })
+        res.json(response)
+    } catch (e) {
+        console.log(`Failed to fetch the user user data: ${e}`)
     }
-}
-
-/**
- * Destroy a specific resource
- *
- * DELETE /:exampleId
- */
-const destroy = (req, res) => {
-    res.status(400).send({
-        status: 'fail',
-        message: 'You need to write the code for deleting this resource yourself.',
-    });
-}
-
-module.exports = {
-    index,
-    show,
-    store,
-    update,
-    destroy,
 }

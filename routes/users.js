@@ -1,21 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const exampleController = require('../controllers/example_controller');
-const exampleValidationRules = require('../validation/example');
+const bookshelf = require('./index');
+const user_controller = require('../controllers/user_controller');
+// const exampleValidationRules = require('../validation/example');
 
 /* Get all resources */
-router.get('/', exampleController.index);
+// router.get('/', userController.index);
 
 /* Get a specific resource */
-router.get('/:exampleId', exampleController.show);
+// router.get('/:exampleId', userController.show);
 
-/* Store a new resource */
-router.post('/', exampleValidationRules.createRules, exampleController.store);
+/* Skapa en ny användare i databasen */
+router.post('/', user_controller.create);
 
 /* Update a specific resource */
-router.put('/:exampleId', exampleValidationRules.updateRules, exampleController.update);
+// router.put('/:exampleId', userValidationRules.updateRules, userController.update);
 
 /* Destroy a specific resource */
-router.delete('/:exampleId', exampleController.destroy);
+// router.delete('/:exampleId', userController.destroy);
 
 module.exports = router;
