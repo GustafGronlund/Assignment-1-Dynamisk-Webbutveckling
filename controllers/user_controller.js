@@ -1,59 +1,85 @@
-let Users = require('../models/Users');
+const debug = require('debug')('photoapp:user_controller');
+let models = require('../models');
+const { matchedData, validationResult } = require('express-validator')
 
-exports.getUsers = async (req, res) => {
+// Hämta alla users
+
+const getUsers = async (req, res) => {
     try {
-        // Vi gör en fetch request
-        // Vi kallar på vår model
-        const response = await Users
-            .forge()
-            .fetchAll()
-            .then(function (data) {
-                const res = {
-                    success: true,
-                    data: data
-                }
-                return res;
-            })
-            .catch(error => {
-                const res = {
-                    success: false,
-                    error: error
-                }
-                return res
-            })
-        res.json(response)
-    } catch (e) {
-        console.log(`Failed to fetch the user user data: ${e}`)
+        const get_users = await models.Users.fetchAll();
+        /* Hämta med relationer så hade det varit */
+        /*
+        .fetch({withRelatied: ['Photos']})
+        */
+        res.send({
+            status: 'success',
+            data: {
+                users: get_users
+            }
+        })
+    } catch (error) {
+        res.status(500).send({
+            status: 'error',
+            message: 'Exception thrown in database when creating a new example.',
+        });
+        throw error;
     }
 }
 
-exports.createUser = async (req, res) => {
-    try {
-        // Vi gör en const med values från req.body
-        const { email, password, first_name, last_name } = req.body
-        const response = await Users.forge({
-            email: email,
-            password: password,
-            first_name: first_name,
-            last_name: last_name
-        }).save()
-            .then(function (data) {
-                const res = {
-                    success: true,
-                    data: data,
-                    message: "user created :)"
-                }
-                return res;
-            })
-            .catch(error => {
-                const res = {
-                    success: false,
-                    error: error
-                }
-                return res
-            })
-        res.json(response)
-    } catch (e) {
-        console.log(`Failed to fetch the user user data: ${e}`)
+// Skapa en user
+
+const createUser = async (req, res) => {
+
+    // kollar ifall det fanns några fel
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(422).send({
+            status: 'fail',
+            data: errors.array()
+        })
     }
+
+    // den validerade datan från request
+    const validData = matchedData(req);
+
+    try {
+        const newUser = await new models.Users(validData).save();
+        debug("Created new example successfully: %O", newUser);
+
+        res.send({
+            status: 'success',
+            data: newUser,
+        });
+
+    } catch (error) {
+        res.status(500).send({
+            status: 'error',
+            message: 'Exception thrown in database when creating a new example.',
+        });
+        throw error;
+    }
+}
+// Hämta en user baserat på id
+
+const getSingleUser = async (req, res) => {
+    try {
+        const user = await new models.Users({ id: req.params.userId }).fetch();
+        res.send({
+            status: 'success',
+            data: {
+                user
+            }
+        })
+
+    } catch (error) {
+        console.log(`Failed to fetch the user user data: ${error}`)
+    }
+}
+
+
+module.exports = {
+    getUsers,
+    createUser,
+    getSingleUser
 }

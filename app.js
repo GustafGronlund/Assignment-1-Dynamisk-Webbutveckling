@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const logger = require('morgan');
+const { body, matchedData, validationResult } = require('express-validator');
 
 // instantiate express
 const app = express();
@@ -9,11 +10,10 @@ const app = express();
 app.use(logger('dev'));
 app.use(cors());
 app.use(express.json());
-/* EXTENDED KANSKE sKA VARA TRUE HÄR */
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 
 // routes
-// app.use(require('./routes'));
+app.use(require("./routes"));
 
 // app.listen(1337, () => {
 //     console.log('Servern är startad på localhost:1337');

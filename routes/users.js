@@ -1,22 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const bookshelf = require('./index');
 const user_controller = require('../controllers/user_controller');
-// const exampleValidationRules = require('../validation/example');
+const userRules = require('../validation/user');
 
-/* Get all resources */
-// router.get('/', userController.index);
-
-/* Get a specific resource */
-// router.get('/:exampleId', userController.show);
-
-/* Skapa en ny användare i databasen */
-router.post('/', user_controller.create);
-
-/* Update a specific resource */
-// router.put('/:exampleId', userValidationRules.updateRules, userController.update);
-
-/* Destroy a specific resource */
-// router.delete('/:exampleId', userController.destroy);
+router.get('/', user_controller.getUsers)
+router.post('/', userRules.creationUserRules, user_controller.createUser)
+router.get('/:userId', user_controller.getSingleUser)
+router.put('/', user_controller.updateUser)
+router.delete('/:userId', user_controller.deleteUser)
 
 module.exports = router;

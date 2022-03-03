@@ -4,7 +4,8 @@
   "description": "Assignment 1 for the course \"Dynamisk Webbutveckling\".",
   "main": "node ./bin/www",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "debug": "cross-env DEBUG=photoapp:* nodemon --inspect ./bin/www"
   },
   "author": "",
   "license": "ISC",

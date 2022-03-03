@@ -1,7 +1,4 @@
-require('dotenv').config();
-
-/* Sätter upp anslutningen till databasen */
-
+// Setting up the database connection
 const knex = require('knex')({
     debug: true,
     client: 'mysql',
@@ -14,5 +11,12 @@ const knex = require('knex')({
     }
 });
 
-module.exports.knex = knex
+const bookshelf = require('bookshelf')(knex);
 
+const models = {};
+models.Users = require('./Users')(bookshelf);
+
+module.exports = {
+    bookshelf,
+    ...models,
+};
