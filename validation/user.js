@@ -6,13 +6,9 @@ const { body } = require('express-validator');
 
 const creationUserRules = [
     body('email').exists().isEmail(),
-    body('password').exists().isLength({ min: 3 }),
-    body('first_name').exists().isLength({ min: 1 }),
-    body('last_name').exists().isLength({ min: 1 })
-]
-
-const updateUserRules = [
-
+    body('password').exists().isLength({ min: 6 }),
+    body('first_name').exists().isString().isLength({ min: 3 }),
+    body('last_name').exists().isString().isLength({ min: 3 })
 ]
 
 module.exports = {

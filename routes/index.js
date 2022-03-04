@@ -7,7 +7,8 @@ router.get('/', (req, res, next) => {
     res.send({ success: true, data: { msg: 'oh, hi' } });
 });
 
-router.use('/user', require('./users'));
+router.use('/register', require('./users'));
 router.use('/profile', auth.basicUserAuth, require('./profile'));
+router.use('/photos', require('./photos'));
 
 module.exports = router;

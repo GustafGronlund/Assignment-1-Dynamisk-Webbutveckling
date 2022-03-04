@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const debug = require('debug')('photapp:auth');
 const { Users } = require('../models');
 
@@ -32,7 +33,7 @@ const basicUserAuth = async (req, res, next) => {
     const [email, password] = base64ToAscii.split(':');
 
     // kollar ifall användaruppgifterna existerar
-    const users = await new Users({ email, password }).fetch({ require: false })
+    const users = await new Users({ email }).fetch({ require: false })
 
     // ifall inget matchade med user i databasen
     if (!users) {
@@ -41,6 +42,17 @@ const basicUserAuth = async (req, res, next) => {
             data: "Couldn't find the user.",
         })
     }
+
+    // jämför lösenordet med det hashade lösenordet i databasen
+    const result = await bcrypt.compare(password, users.get('password'));
+    // ifall compare returnerar false
+    if (!result) {
+        return res.status(401).send({
+            status: 'fail',
+            message: 'Wrong password.'
+        })
+    }
+
     // vi bifogar user till req
     req.user = users;
 
