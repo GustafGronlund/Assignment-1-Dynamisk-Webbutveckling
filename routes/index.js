@@ -9,6 +9,6 @@ router.get('/', (req, res, next) => {
 
 router.use('/register', require('./users'));
 router.use('/profile', auth.basicUserAuth, require('./profile'));
-router.use('/photos', require('./photos'));
+router.use('/photos', auth.basicUserAuth, require('./photos'));
 
 module.exports = router;
