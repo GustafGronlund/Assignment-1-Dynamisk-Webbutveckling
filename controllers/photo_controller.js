@@ -67,7 +67,39 @@ const uploadPhoto = async (req, res) => {
     }
 }
 
+const getSinglePhoto = async (req, res) => {
+    try {
+        const { id } = req.params
+        const response = await Photos.forge({
+            "id": id
+        }).fetch()
+            .then(function (data) {
+                let compare = data.toJSON();
+                if (compare.user_id != req.user.id) {
+                    res.status(418).send({
+                        status: 'error',
+                        message: "This is not your book.",
+                    });
+                }
+                // console.log('Här är bokens nr: ' + compare.user_id + ' och inloggad användare ' + req.user.id)
+                res.status(200).send({
+                    status: 'success',
+                    data: {
+                        data
+                    }
+                });
+            })
+    } catch (error) {
+        res.status(418).send({
+            status: 'error',
+            message: "This is not your book.",
+        });
+        throw error;
+    }
+}
+
 module.exports = {
     getPhotos,
-    uploadPhoto
+    uploadPhoto,
+    getSinglePhoto
 }
