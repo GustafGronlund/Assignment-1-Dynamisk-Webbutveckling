@@ -15,8 +15,9 @@ const getPhotos = async (req, res) => {
                 withRelated: ['photos']
             })
             .then(function (data) {
-                console.log(data)
                 data = data.toJSON();
+                console.log('här är konsolen' + data.data)
+                // let newData = data.findIndex((item) => { return item.field === 'photos' })
                 res.status(200).send({
                     status: 'success',
                     data: data
@@ -85,7 +86,10 @@ const getSinglePhoto = async (req, res) => {
                 res.status(200).send({
                     status: 'success',
                     data: {
-                        data
+                        "id:": compare.id,
+                        "title": compare.title,
+                        "url": compare.url,
+                        "comment": compare.comment
                     }
                 });
             })
@@ -98,8 +102,13 @@ const getSinglePhoto = async (req, res) => {
     }
 }
 
+const updateSinglePhoto = async (req, res) => {
+
+}
+
 module.exports = {
     getPhotos,
     uploadPhoto,
-    getSinglePhoto
+    getSinglePhoto,
+    updateSinglePhoto
 }

@@ -1,24 +1,26 @@
 {
   "name": "assignment-1-dynamisk-webbutveckling",
-  "version": "1.0.0",
-  "description": "Assignment 1 for the course \"Dynamisk Webbutveckling\".",
-  "main": "node ./bin/www",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./bin/www",
+    "dev": "cross-env DEBUG=photoapp:* nodemon ./bin/www",
     "debug": "cross-env DEBUG=photoapp:* nodemon --inspect ./bin/www"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "bookshelf": "^1.2.0",
     "cors": "^2.8.5",
-    "debug": "^4.3.3",
+    "debug": "~2.6.9",
     "dotenv": "^16.0.0",
-    "express": "^4.17.3",
+    "express": "~4.16.1",
     "express-validator": "^6.14.0",
-    "knex": "^1.0.3",
-    "morgan": "^1.10.0",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "~1.9.1",
     "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "nodemon": "^2.0.15"
   }
 }
