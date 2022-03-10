@@ -6,6 +6,8 @@ const albumRules = require('../validation/albums');
 router.get('/', albums_controller.getAlbums)
 router.post('/', albumRules.creationAlbumRules, albums_controller.uploadAlbum)
 router.get('/:id', albums_controller.getSingleAlbum)
-// router.put('/', user_controller.updateUser)
+router.put('/:id', albumRules.updateAlbumRules, albums_controller.updateSingleAlbum)
+router.post('/:id/photos', albums_controller.addPhotoToAlbum)
+
 
 module.exports = router;

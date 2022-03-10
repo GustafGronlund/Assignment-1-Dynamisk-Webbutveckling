@@ -6,6 +6,6 @@ const photoRules = require('../validation/photos');
 router.get('/', photo_controller.getPhotos)
 router.post('/', photoRules.creationPhotoRules, photo_controller.uploadPhoto)
 router.get('/:id', photo_controller.getSinglePhoto)
-// router.put('/', user_controller.updateUser)
+router.put('/:id', photoRules.updatePhotoRules, photo_controller.updateSinglePhoto)
 
 module.exports = router;

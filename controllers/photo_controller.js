@@ -8,6 +8,7 @@ const { matchedData, validationResult } = require('express-validator');
 
 const getPhotos = async (req, res) => {
     try {
+        // Hämtar user baserat på id
         Users.where({
             id: req.user.id
         })
@@ -16,11 +17,9 @@ const getPhotos = async (req, res) => {
             })
             .then(function (data) {
                 data = data.toJSON();
-                console.log('här är konsolen' + data.data)
-                // let newData = data.findIndex((item) => { return item.field === 'photos' })
                 res.status(200).send({
                     status: 'success',
-                    data: data
+                    data: data[0].photos
                 })
             })
     } catch (error) {
@@ -35,8 +34,10 @@ const getPhotos = async (req, res) => {
 // Ladda upp foto
 
 const uploadPhoto = async (req, res) => {
+
     // kollar ifall det fanns några fel
     const errors = validationResult(req);
+
     // skickar felmeddelande isåfall
     if (!errors.isEmpty()) {
         return res.status(422).send({
@@ -44,11 +45,14 @@ const uploadPhoto = async (req, res) => {
             data: errors.array()
         })
     }
+
     // den validerade datan från request
     const validData = matchedData(req);
+
+    // lägger in auktoriserad user.id till datan
     validData.user_id = req.user.id;
     //postar till databasen
-    try {
+    try {1
         Photos.forge({ title: validData.title, url: validData.url, comment: validData.comment, user_id: req.user.id })
             .save()
             .then(function (data) {
@@ -60,7 +64,7 @@ const uploadPhoto = async (req, res) => {
                 });
             })
     } catch (error) {
-        res.status(418).send({
+        res.status(500).send({
             status: 'error',
             message: "Something went wrong when trying to register, please try again.",
         });
@@ -82,7 +86,6 @@ const getSinglePhoto = async (req, res) => {
                         message: "This is not your book.",
                     });
                 }
-                // console.log('Här är bokens nr: ' + compare.user_id + ' och inloggad användare ' + req.user.id)
                 res.status(200).send({
                     status: 'success',
                     data: {
@@ -94,7 +97,7 @@ const getSinglePhoto = async (req, res) => {
                 });
             })
     } catch (error) {
-        res.status(418).send({
+        res.status(400).send({
             status: 'error',
             message: "This is not your book.",
         });
@@ -104,6 +107,55 @@ const getSinglePhoto = async (req, res) => {
 
 const updateSinglePhoto = async (req, res) => {
 
+    // kollar ifall det fanns några fel
+    const errors = validationResult(req);
+
+    // skickar felmeddelande isåfall
+    if (!errors.isEmpty()) {
+        return res.status(400).send({
+            status: 'fail',
+            data: errors.array()
+        })
+    }
+
+    // den validerade datan från request
+    const validData = matchedData(req);
+
+    // hämtar id från url
+    const { id } = req.params
+
+    // fetchar fotografi med id 
+    const photo = await Photos.forge({"id": id}).fetch()
+
+    // gör om datan vi har hämtat till json
+    let compare = photo.toJSON();
+
+    // kollar ifall user_id på fotografiet stämmer, annars skickar error
+    if (compare.user_id != req.user.id) {
+        res.status(406).send({
+            status: 'error',
+            message: "This is not your photo.",
+        });
+    }
+
+    try {
+        // Sparar till det fetchade fotografiet med den validerade datan
+        const updateThePhoto = await photo.save(validData);
+
+        res.status(201).send({
+            status: 'success',
+            data: {
+                updateThePhoto
+            },
+        });
+
+    } catch (error) {
+        res.status(500).send({
+            status: 'error',
+            message: 'Something went wrong when trying to update the selected photo, please try again.',
+        });
+        throw error;
+    }
 }
 
 module.exports = {

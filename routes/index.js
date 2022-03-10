@@ -8,7 +8,6 @@ router.get('/', (req, res, next) => {
 });
 
 router.use('/register', require('./users'));
-router.use('/profile', auth.basicUserAuth, require('./profile'));
 router.use('/photos', auth.basicUserAuth, require('./photos'));
 router.use('/albums', auth.basicUserAuth, require('./albums'))
 
