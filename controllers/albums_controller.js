@@ -135,40 +135,56 @@ const addPhotoToAlbum = async (req, res) => {
     // den validerade datan från request
 	const validData = matchedData(req);
 
+    //load the users photo and album relation
+	await req.user.load("photos");
+	await req.user.load("albums");
+
+	//all the users photos and albums
+	const users_photos = req.user.related("photos");
+	const users_albums = req.user.related("albums");
+
+    //check if the album and photo belongs to a user
+	anvandare_photo = users_photos.find(
+		(photo) => photo.id == req.body.photo_id
+	);
+	anvandare_album = users_albums.find(
+		(album) => album.id == req.params.id
+	);
+
     // hämtar albumet med det id som är skrivet i url, plockar med de relaterade fotografierna
 	const album = await new models.Albums({ id: req.params.id }).fetch({withRelated:['photos']});
 
-    // hämtar fotografierna som är relaterade till albumet
-	// const photos = album.related('photos');
+    	//Getting the photos inside the album
+	const photos = album.related("photos");
 
-    // hämtar fotografiet som användare har skickat baserat på photo_id
-    // const response_photo = await Photos.forge({"id": req.body.photo_id}).fetch({columns: ['id', 'user_id']})
+	//Check if the photo I want to add exists in the album
+	const existing_photo = photos.find(
+		(photo) => photo.id == validData.photo_id
+	);
 
-    // console.log('ny konsol här ' + response_photo.url)
+	//Does it exist in the album, if so fail
+	if (existing_photo) {
+		return res.status(400).send({
+			status: "fail",
+			data: "The photo exists in the album already.",
+		});
+	}
 
-    // console.log('bok id är ' + response_photo.user_id + 'och inloggad är ' + req.user.id)
+    	//Does the photo belong to user, if not so fail
+	if (!anvandare_photo) {
+		return res.status(401).send({
+			status: "fail",
+			data: "The photo doesn't belong to you.",
+		});
+	}
 
-    // kollar ifall fotografiet hör ihop med användare, annars så gör vi en exit
-    // if (response_photo.user_id != req.user.id) {
-    //     res.status(400).send({
-    //         status: 'error',
-    //         message: "This is not your book.",
-    //     });
-    //     return res
-    // }
-
-    // const {id} = req.params
-
-    // hämtar albumet som användare har skickat baserat på album_id
-    // const response_album = await Albums.forge({"id": id}).fetch()
-
-    // kollar ifall albumet hör ihop med användare, annars så gör vi en exit
-    // if (response_album.user_id != req.user.id) {
-    //     res.status(400).send({
-    //         status: 'error',
-    //         message: "This is not your album.",
-    //      });
-    // }
+	//Does the album belong to user, if not so fail
+	if (!anvandare_album) {
+		return res.status(401).send({
+			status: "fail",
+			data: "The album doesn't belong to you.",
+		});
+	}
 
     // attachar fotografiet till det album som har fetchats
 	try {
@@ -206,7 +222,7 @@ const getSingleAlbum = async (req, res) => {
                 if (compare.user_id != req.user.id) {
                     return res.status(418).send({
                         status: 'error',
-                        message: "This is not your album, load this.",
+                        message: "This is not your album, try again with your own album.",
                     });
                 }
 
