@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www",
+    "start": "node ./bin/www",
     "dev": "cross-env DEBUG=photoapp:* nodemon ./bin/www",
     "debug": "cross-env DEBUG=photoapp:* nodemon --inspect ./bin/www"
   },
