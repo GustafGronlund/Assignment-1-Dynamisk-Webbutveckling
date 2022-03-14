@@ -1,0 +1,419 @@
+{
+	"info": {
+		"_postman_id": "f8b466f0-8242-42a3-80cd-1289e088f1f3",
+		"name": "PhotoApp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "/register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"testuser@testuser33.io\",\n    \"password\": \"test33ing\",\n    \"first_name\": \"t33ster\",\n    \"last_name\": \"te33ster\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://stormy-bastion-60215.herokuapp.com/register",
+							"protocol": "https",
+							"host": [
+								"stormy-bastion-60215",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Photos",
+			"item": [
+				{
+					"name": "/photos",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "testing",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "testuser@testuser.io",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Bild på när jag testar.\",\n    \"url\": \"http://www.ensidamedvirus.se\",\n    \"comment\": \"Den url:en är lugn, jag lovar.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://stormy-bastion-60215.herokuapp.com/photos",
+							"protocol": "https",
+							"host": [
+								"stormy-bastion-60215",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"photos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/photos",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "testing",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "testuser@testuser.io",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://stormy-bastion-60215.herokuapp.com/photos",
+							"protocol": "https",
+							"host": [
+								"stormy-bastion-60215",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"photos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/photos/id",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "testing",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "testuser@testuser.io",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://stormy-bastion-60215.herokuapp.com/photos/19",
+							"protocol": "https",
+							"host": [
+								"stormy-bastion-60215",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"photos",
+								"19"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/photos/id",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "testing",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "testuser@testuser.io",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"nu bytte jag titel\",\n    \"comment\": \"ja men det funkar\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://stormy-bastion-60215.herokuapp.com/photos/19",
+							"protocol": "https",
+							"host": [
+								"stormy-bastion-60215",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"photos",
+								"19"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Albums",
+			"item": [
+				{
+					"name": "/albums",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "testing",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "testuser@testuser.io",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Mitt testing album\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://stormy-bastion-60215.herokuapp.com/albums",
+							"protocol": "https",
+							"host": [
+								"stormy-bastion-60215",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"albums"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/albums",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "testing",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "testuser@testuser.io",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://stormy-bastion-60215.herokuapp.com/albums",
+							"protocol": "https",
+							"host": [
+								"stormy-bastion-60215",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"albums"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/albums/id",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "testing",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "testuser@testuser.io",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://stormy-bastion-60215.herokuapp.com/albums/6",
+							"protocol": "https",
+							"host": [
+								"stormy-bastion-60215",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"albums",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/albums/id",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "testing",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "testuser@testuser.io",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"det funkar\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://stormy-bastion-60215.herokuapp.com/albums/6",
+							"protocol": "https",
+							"host": [
+								"stormy-bastion-60215",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"albums",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/albums/id/photos",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "testing",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "testuser@testuser.io",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"photo_id\": 19\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://stormy-bastion-60215.herokuapp.com/albums/6/photos",
+							"protocol": "https",
+							"host": [
+								"stormy-bastion-60215",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"albums",
+								"6",
+								"photos"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
