@@ -132,7 +132,7 @@ const updateSinglePhoto = async (req, res) => {
 
     // kollar ifall user_id på fotografiet stämmer, annars skickar error
     if (compare.user_id != req.user.id) {
-        res.status(406).send({
+        return res.status(406).send({
             status: 'error',
             message: "This is not your photo.",
         });

@@ -96,7 +96,7 @@ const updateSingleAlbum = async (req, res) => {
 
     // kollar ifall user_id på albumet stämmer, annars skickar error
     if (compare.user_id != req.user.id) {
-        res.status(406).send({
+        return res.status(406).send({
             status: 'error',
             message: "This is not your album.",
         });
@@ -135,15 +135,15 @@ const addPhotoToAlbum = async (req, res) => {
     // den validerade datan från request
 	const validData = matchedData(req);
 
-    //load the users photo and album relation
+    //laddar in foton samt album relaterade till user
 	await req.user.load("photos");
 	await req.user.load("albums");
 
-	//all the users photos and albums
+	//laddar in bilder samt foton som tillhör user
 	const users_photos = req.user.related("photos");
 	const users_albums = req.user.related("albums");
 
-    //check if the album and photo belongs to a user
+    //kollar av ifall foto samt album tillhör användaren
 	anvandare_photo = users_photos.find(
 		(photo) => photo.id == req.body.photo_id
 	);
@@ -154,15 +154,15 @@ const addPhotoToAlbum = async (req, res) => {
     // hämtar albumet med det id som är skrivet i url, plockar med de relaterade fotografierna
 	const album = await new models.Albums({ id: req.params.id }).fetch({withRelated:['photos']});
 
-    	//Getting the photos inside the album
+    //laddar in foto till variabeln
 	const photos = album.related("photos");
 
-	//Check if the photo I want to add exists in the album
+	//kollar ifall fotografiet redan finns i albumet
 	const existing_photo = photos.find(
 		(photo) => photo.id == validData.photo_id
 	);
 
-	//Does it exist in the album, if so fail
+	//om det finns så skickar den error
 	if (existing_photo) {
 		return res.status(400).send({
 			status: "fail",
@@ -170,7 +170,7 @@ const addPhotoToAlbum = async (req, res) => {
 		});
 	}
 
-    	//Does the photo belong to user, if not so fail
+    //om fotot inte tillhör användare så skickar vi error
 	if (!anvandare_photo) {
 		return res.status(401).send({
 			status: "fail",
@@ -178,7 +178,7 @@ const addPhotoToAlbum = async (req, res) => {
 		});
 	}
 
-	//Does the album belong to user, if not so fail
+	//om albumet inte tillhör användare så skickar vi error
 	if (!anvandare_album) {
 		return res.status(401).send({
 			status: "fail",
@@ -188,7 +188,7 @@ const addPhotoToAlbum = async (req, res) => {
 
     // attachar fotografiet till det album som har fetchats
 	try {
-		const result = await album.photos().attach(req.body.photo_id);
+		const result = await album.photos().attach(validData.photo_id);
 		res.send({
 			status: 'success',
 			data: result,
